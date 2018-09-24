@@ -1,0 +1,3 @@
+commands:
+  queue.queue_worker_command:
+    class: Hunter\queue\Command\QueueWorkerCmd

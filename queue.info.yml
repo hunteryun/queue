@@ -1,0 +1,5 @@
+name: Queue
+type: module
+description: Message queue module for HunterPHP.
+core: 1.x
+package: Hunter

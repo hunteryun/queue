@@ -1,0 +1,6 @@
+{
+    "require": {
+      "enqueue/pheanstalk": "^0.8.23",
+      "enqueue/simple-client": "^0.8.28"
+    }
+}

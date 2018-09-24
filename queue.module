@@ -1,0 +1,9 @@
+<?php
+
+use Hunter\queue\Plugin\ProviderManager;
+
+ /**
+  * Parsing the video url.
+  */
+ function queue_push() {
+ }
