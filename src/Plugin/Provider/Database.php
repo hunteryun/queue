@@ -13,27 +13,95 @@ use Hunter\queue\Annotation\QueueProvider;
   */
 class Database {
 
-  /**
-   * {@inheritdoc}
-   */
-  public function createItem($data) {
-    global $queue_server;
-    $factory = new PheanstalkConnectionFactory([
-        'host' => $queue_server['host'],
-        'port' => $queue_server['port']
-    ]);
+    /**
+     * The queue.
+     *
+     * @var string
+     */
+    protected $queue;
 
-    $psrContext = $factory->createContext();
-    $fooQueue = $psrContext->createQueue($queue_server['queue']);
-    $message = $psrContext->createMessage($data);
+    /**
+     * The plugins.
+     *
+     * @var string
+     */
+    protected $pluginList;
 
-    $psrContext->createProducer()->send($fooQueue, $message);
-  }
+    /**
+     * The psrContext.
+     */
+    protected $psrContext;
 
-  /**
-   * {@inheritdoc}
-   */
-  public function deleteItem($item) {
-  }
+    /**
+     * The consumer.
+     */
+    protected $consumer;
+
+    /**
+     * Create a queue.
+     */
+    public function __construct($pluginList = array()) {
+      if(!empty($pluginList)){
+        $this->pluginList = $pluginList;
+      }
+      if(empty($this->queue)){
+        $this->createQueue();
+      }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createItem($job, $data) {
+      $data['job'] = $job;
+      $message = $this->psrContext->createMessage($data);
+      $this->psrContext->createProducer()->send($this->queue, $message);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function receiveItem($parms) {
+      $this->consumer = $this->psrContext->createConsumer($this->queue);
+      $message = $this->consumer->receive($parms['delay']);
+      $data = $message->getBody();
+      if(isset($data['job']) && isset($this->pluginList[$data['job']])){
+        $class = $this->pluginList[$data['job']]['class'];
+        $handle = new $class();
+        $response = $handle->processItem($data);
+      }else {
+        $response = $data;
+      }
+      //$this->queue->deleteItem($data);
+      $this->consumer->acknowledge($message);
+      return $response;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createQueue() {
+      global $queue_server;
+      $factory = new PheanstalkConnectionFactory([
+          'host' => $queue_server['host'],
+          'port' => $queue_server['port']
+      ]);
+
+      $this->psrContext = $factory->createContext();
+      $this->queue = $this->psrContext->createQueue($queue_server['queue']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteQueue() {
+      $this->psrContext->deleteQueue($this->queue);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteItem($item) {
+    }
 
 }

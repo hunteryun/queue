@@ -37,9 +37,9 @@ class QueueWorkerCmd extends BaseCommand {
 
       $providerManager = new ProviderManager();
       $provider = $providerManager->loadProvider();
-      $output = $provider->receiveItem($parms);
+      $response = $provider->receiveItem($parms);
 
-      $output->writeln('['.date("Y-m-d H:i:s").'] '.$output);
+      $output->writeln('['.date("Y-m-d H:i:s").'] '.$response);
     }
 
 }

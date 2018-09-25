@@ -3,8 +3,17 @@
 
 ###服务端启动：
 
+beanstalkd
+
 ```
 /usr/bin/beanstalkd -l 0.0.0.0 -p 11300 -b /var/lib/beanstalkd/binlog -F
+
+```
+
+redis
+
+```
+src/redis-server
 
 ```
 

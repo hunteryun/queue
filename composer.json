@@ -1,6 +1,8 @@
 {
     "require": {
       "enqueue/pheanstalk": "^0.8.23",
-      "enqueue/simple-client": "^0.8.28"
+      "enqueue/simple-client": "^0.8.28",
+      "enqueue/redis": "^0.8.23",
+      "predis/predis": "^1"
     }
 }

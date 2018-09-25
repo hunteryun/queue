@@ -97,6 +97,7 @@ class Beanstalk {
    * {@inheritdoc}
    */
   public function deleteQueue() {
+    $this->psrContext->deleteQueue($this->queue);
   }
 
   /**
