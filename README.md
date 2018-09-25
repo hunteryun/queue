@@ -38,6 +38,28 @@ $queue_server = array(
 
 ```
 
+database
+
+```
+$queue_server = array(
+  'driver' => 'database',
+  'queue' => 'default'
+);
+
+$databases = array(
+    'default' => array(
+        'host'      => 'localhost',
+        'port'      => '3306',
+        'database'  => 'test',
+        'username'  => 'username',
+        'password'  => 'password',
+        'prefix'    => '',
+        'charset'   => 'utf8mb4',
+    ),
+);
+
+```
+
 ###服务端启动：
 
 beanstalkd

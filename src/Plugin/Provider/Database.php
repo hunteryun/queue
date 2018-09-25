@@ -3,6 +3,7 @@
 namespace Hunter\queue\Plugin\Provider;
 
 use Hunter\queue\Annotation\QueueProvider;
+use Enqueue\Dbal\DbalConnectionFactory;
 
  /**
   * @QueueProvider(
@@ -54,7 +55,7 @@ class Database {
      */
     public function createItem($job, $data) {
       $data['job'] = $job;
-      $message = $this->psrContext->createMessage($data);
+      $message = $this->psrContext->createMessage(json_encode($data));
       $this->psrContext->createProducer()->send($this->queue, $message);
     }
 
@@ -64,7 +65,7 @@ class Database {
     public function receiveItem($parms) {
       $this->consumer = $this->psrContext->createConsumer($this->queue);
       $message = $this->consumer->receive($parms['delay']);
-      $data = $message->getBody();
+      $data = json_decode($message->getBody(), true);
       if(isset($data['job']) && isset($this->pluginList[$data['job']])){
         $class = $this->pluginList[$data['job']]['class'];
         $handle = new $class();
@@ -81,13 +82,11 @@ class Database {
      * {@inheritdoc}
      */
     public function createQueue() {
-      global $queue_server;
-      $factory = new PheanstalkConnectionFactory([
-          'host' => $queue_server['host'],
-          'port' => $queue_server['port']
-      ]);
+      global $queue_server, $databases;
+      $factory = new DbalConnectionFactory('mysql://'.$databases['default']['username'].':'.$databases['default']['password'].'@'.$databases['default']['host'].':'.$databases['default']['port'].'/'.$databases['default']['database']);
 
       $this->psrContext = $factory->createContext();
+      $this->psrContext->createDataBaseTable();
       $this->queue = $this->psrContext->createQueue($queue_server['queue']);
     }
 

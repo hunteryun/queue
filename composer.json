@@ -4,6 +4,7 @@
       "enqueue/simple-client": "^0.8.28",
       "enqueue/redis": "^0.8.23",
       "predis/predis": "^1",
-      "enqueue/fs": "^0.8.24"
+      "enqueue/fs": "^0.8.24",
+      "enqueue/dbal": "^0.8.32"
     }
 }
