@@ -1,6 +1,32 @@
 #用法：
 ======================
 
+###config.php添加配置：
+
+beanstalk
+
+```
+$queue_server = array(
+  'driver' => 'beanstalk',
+  'queue' => 'default',
+  'host' => '47.52.252.50',
+  'port' => 11300
+);
+
+```
+
+redis
+
+```
+$queue_server = array(
+  'driver' => 'redis',
+  'queue' => 'default',
+  'host' => 'localhost',
+  'port' => 6379
+);
+
+```
+
 ###服务端启动：
 
 beanstalkd

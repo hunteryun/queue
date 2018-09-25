@@ -84,8 +84,8 @@ class Redis {
     public function createQueue() {
       global $queue_server;
       $connectionFactory = new RedisConnectionFactory([
-          'host' => 'localhost',
-          'port' => 6379,
+          'host' => $queue_server['host'],
+          'port' => $queue_server['port']
           'vendor' => 'predis',
       ]);
 
