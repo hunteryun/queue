@@ -9,7 +9,7 @@ beanstalk
 $queue_server = array(
   'driver' => 'beanstalk',
   'queue' => 'default',
-  'host' => '47.52.252.50',
+  'host' => 'localhost',
   'port' => 11300
 );
 
@@ -23,6 +23,17 @@ $queue_server = array(
   'queue' => 'default',
   'host' => 'localhost',
   'port' => 6379
+);
+
+```
+
+file
+
+```
+$queue_server = array(
+  'driver' => 'file',
+  'queue' => 'default',
+  'path' => 'sites/message'
 );
 
 ```

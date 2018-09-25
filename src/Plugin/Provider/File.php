@@ -3,16 +3,16 @@
 namespace Hunter\queue\Plugin\Provider;
 
 use Hunter\queue\Annotation\QueueProvider;
-use Enqueue\Redis\RedisConnectionFactory;
+use Enqueue\Fs\FsConnectionFactory;
 
 /**
  * @QueueProvider(
- *   id = "redis",
- *   title = "Redis",
+ *   id = "file",
+ *   title = "File",
  *   type = "queue_provider"
  * )
  */
-class Redis {
+class File {
 
     /**
      * The queue.
@@ -83,10 +83,9 @@ class Redis {
      */
     public function createQueue() {
       global $queue_server;
-      $connectionFactory = new RedisConnectionFactory([
-          'host' => $queue_server['host'],
-          'port' => $queue_server['port'],
-          'vendor' => 'predis',
+      $connectionFactory = new FsConnectionFactory([
+          'path' => $queue_server['path'],
+          'pre_fetch_count' => 1,
       ]);
 
       $this->psrContext = $connectionFactory->createContext();
