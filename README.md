@@ -82,6 +82,7 @@ Supervisor 守护进程方式
 ```
 yum install supervisor //安装
 systemctl enable supervisord.service //开机启动
+systemctl status supervisord.service //查看状态
 systemctl start supervisord.service //启动
 systemctl restart supervisord.service //重启
 systemctl stop supervisord.service //停止服务
