@@ -54,8 +54,11 @@ class Redis {
      * {@inheritdoc}
      */
     public function createItem($job, $data) {
-      $data['job'] = $job;
-      $message = $this->psrContext->createMessage($data);
+      $jobdata = array();
+      $jobdata['job'] = $job;
+      $jobdata['data'] = $data;
+
+      $message = $this->psrContext->createMessage($jobdata);
       $this->psrContext->createProducer()->send($this->queue, $message);
     }
 
@@ -65,15 +68,14 @@ class Redis {
     public function receiveItem($parms) {
       $this->consumer = $this->psrContext->createConsumer($this->queue);
       $message = $this->consumer->receive($parms['delay']);
-      $data = $message->getBody();
-      if(isset($data['job']) && isset($this->pluginList[$data['job']])){
-        $class = $this->pluginList[$data['job']]['class'];
+      $jobdata = $message->getBody();
+      if(isset($jobdata['job']) && isset($this->pluginList[$jobdata['job']])){
+        $class = $this->pluginList[$jobdata['job']]['class'];
         $handle = new $class();
-        $response = $handle->processItem($data);
+        $response = $handle->processItem($jobdata['data']);
       }else {
-        $response = $data;
+        $response = $jobdata['data'];
       }
-      //$this->queue->deleteItem($data);
       $this->consumer->acknowledge($message);
       return $response;
     }

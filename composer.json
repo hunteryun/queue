@@ -10,5 +10,5 @@
     "require-dev": {
       "wrep/daemonizable-command": "^2.1",
       "phlib/console-process": "^1.0"
-    },
+    }
 }
