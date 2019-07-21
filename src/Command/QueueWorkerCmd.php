@@ -36,8 +36,16 @@ class QueueWorkerCmd extends BaseCommand {
       $parms = $input->getOptions();
 
       $providerManager = new ProviderManager();
-      $provider = $providerManager->loadProvider();
-      $response = $provider->receiveItem($parms);
+
+      if($parms['daemon']){
+        while (true) {
+          $provider = $providerManager->loadProvider();
+          $response = $provider->receiveItem($parms);
+        }
+      }else {
+        $provider = $providerManager->loadProvider();
+        $response = $provider->receiveItem($parms);
+      }
 
       $output->writeln('['.date("Y-m-d H:i:s").'] '.$response);
     }
