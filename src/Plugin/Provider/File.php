@@ -84,7 +84,7 @@ class File {
      * {@inheritdoc}
      */
     public function createQueue() {
-      global $queue_server;
+      $queue_server = config()->get('queue_server');
       $connectionFactory = new FsConnectionFactory([
           'path' => $queue_server['path'],
           'pre_fetch_count' => 1,

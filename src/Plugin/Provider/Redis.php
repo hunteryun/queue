@@ -84,7 +84,7 @@ class Redis {
      * {@inheritdoc}
      */
     public function createQueue() {
-      global $queue_server;
+      $queue_server = config()->get('queue_server');
       $connectionFactory = new RedisConnectionFactory([
           'host' => $queue_server['host'],
           'port' => $queue_server['port'],

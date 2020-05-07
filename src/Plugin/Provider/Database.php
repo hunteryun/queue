@@ -84,7 +84,8 @@ class Database {
      * {@inheritdoc}
      */
     public function createQueue() {
-      global $queue_server, $databases;
+      $queue_server = config()->get('queue_server');
+      $databases = config()->get('databases');
       $factory = new DbalConnectionFactory('mysql://'.$databases['default']['username'].':'.$databases['default']['password'].'@'.$databases['default']['host'].':'.$databases['default']['port'].'/'.$databases['default']['database']);
 
       $this->psrContext = $factory->createContext();

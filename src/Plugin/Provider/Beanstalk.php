@@ -85,7 +85,7 @@ class Beanstalk {
    * {@inheritdoc}
    */
   public function createQueue() {
-    global $queue_server;
+    $queue_server = config()->get('queue_server');
     $factory = new PheanstalkConnectionFactory([
         'host' => $queue_server['host'],
         'port' => $queue_server['port']
